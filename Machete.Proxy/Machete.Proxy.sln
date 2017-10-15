@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machete.Proxy", "Machete.Proxy\Machete.Proxy.csproj", "{53445114-5B31-431D-9AE4-F87716648A0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machete.Proxy.Test", "Machete.Proxy.Test\Machete.Proxy.Test.csproj", "{966E106F-BA7A-4141-9C97-ACB26127EBE6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{53445114-5B31-431D-9AE4-F87716648A0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53445114-5B31-431D-9AE4-F87716648A0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53445114-5B31-431D-9AE4-F87716648A0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53445114-5B31-431D-9AE4-F87716648A0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{966E106F-BA7A-4141-9C97-ACB26127EBE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{966E106F-BA7A-4141-9C97-ACB26127EBE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{966E106F-BA7A-4141-9C97-ACB26127EBE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{966E106F-BA7A-4141-9C97-ACB26127EBE6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {359D28FF-5112-4F7C-956E-E922CD2E3AA4}
+	EndGlobalSection
+EndGlobal

@@ -17,11 +17,13 @@ namespace Machete.Proxy.Test
             var proxyObject = new UserDao();
             var factory = new AutoProxyFatory<IUserDao>();
             IUserDao userDao = factory.Build(proxyObject, intercept);
+
             //plugin.TestMethod2("Zhangsan", 42);
             string ret1 = userDao.Get("nele");
             int ret2 = userDao.Delete(1);
             userDao.Show("nele");
             userDao.Update("nele", 2);
+            IUserDao userDao1 = factory.Build(proxyObject, intercept);
             // Test();
         }
 

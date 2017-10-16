@@ -20,14 +20,21 @@ namespace Machete.Proxy
 
         public T Build(T proxyObject, IIntercept intercept)
         {
-            if (_cachedType == null)
+            string key = typeof(T).FullName;
+            ProxyCache cache = new ProxyCache();
+            if (cache.Contains(key))
+            {
+                _cachedType = cache.Get(key);
+            }
+            else
             {
                 _cachedType = _proxyTypeGenerator.Build<T>();
+                cache.Store(key, _cachedType);
             }
+
             var proxy = (T)Activator.CreateInstance(_cachedType, proxyObject);
 
             ProxyTypeBase<T> proxyBase = proxy as ProxyTypeBase<T>;
-
             proxyBase.Intercept = intercept;
 
             return proxy;

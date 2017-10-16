@@ -40,7 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutoProxyFatory.cs" />
+    <Compile Include="ProxyCache.cs" />
+    <Compile Include="ProxyFatory.cs" />
     <Compile Include="IIntercept.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="InterfaceProxy.cs" />

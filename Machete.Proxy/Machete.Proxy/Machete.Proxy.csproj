@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Invocation.cs" />
+    <Compile Include="IInvocation.cs" />
     <Compile Include="ProxyInterfaceCache.cs" />
     <Compile Include="ProxyTypeCache.cs" />
     <Compile Include="ProxyTypeFatory.cs" />

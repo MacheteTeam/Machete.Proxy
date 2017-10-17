@@ -9,32 +9,8 @@ using System.Threading.Tasks;
 
 namespace Machete.Proxy
 {
-    public class ProxyTypeGenerator
+    public class ProxyTypeGenerator : ProxyGeneratorBase
     {
-
-        /// <summary>
-        /// build dynamic assembly
-        /// </summary>
-        /// <returns></returns>
-        private AssemblyBuilder GetAssemblyBuilder()
-        {
-            string assemblyName = $"smallcode.{Guid.NewGuid().ToString().Replace("-", "")}";
-            AssemblyName name = new AssemblyName(assemblyName);
-            var builder = AppDomain.CurrentDomain.DefineDynamicAssembly(name, AssemblyBuilderAccess.Run);
-            return builder;
-        }
-
-        /// <summary>
-        /// build module
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        private ModuleBuilder BuildModule(AssemblyBuilder builder)
-        {
-            string moduleName = $"smallcode.{Guid.NewGuid().ToString().Replace("-", "")}";
-            var module = builder.DefineDynamicModule(moduleName);
-            return module;
-        }
 
         /// <summary>
         /// build type
@@ -42,7 +18,7 @@ namespace Machete.Proxy
         /// <typeparam name="T"></typeparam>
         /// <param name="builder"></param>
         /// <returns></returns>
-        private TypeBuilder BuildType<T>(ModuleBuilder builder)
+        protected override TypeBuilder  BuildType<T>(ModuleBuilder builder)
         {
             Type baseType = typeof(T);
             Type parentType = typeof(ProxyTypeBase<T>);
@@ -54,7 +30,7 @@ namespace Machete.Proxy
             return typeBuilder;
         }
 
-        void ImplementCtor<T>(TypeBuilder builder)
+        protected override void ImplementCtor<T>(TypeBuilder builder)
         {
             var baseType = typeof(T);
             Type parentType = typeof(ProxyTypeBase<T>);
@@ -75,39 +51,7 @@ namespace Machete.Proxy
 
         }
 
-        /// <summary>
-        /// if all methods implement
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="builder"></param>
-        /// <returns></returns>
-        bool ImplementMethods<T>(TypeBuilder builder)
-        {
-            var baseType = typeof(T);
-            Type parentType = typeof(ProxyTypeBase<T>);
-            var methods = baseType.GetMethods();
-            foreach (var method in methods)
-            {
-                var methodBuilder = DefineMethod(builder, method);
-                ProxyMethod(methodBuilder, method, parentType);
-                builder.DefineMethodOverride(methodBuilder, method);
-            }
-            return true;
-        }
-
-        private MethodBuilder DefineMethod(TypeBuilder builder, MethodInfo info)
-        {
-            var returnType = info.ReturnType;
-            var paramInfoList = info.GetParameters();
-            var paramTypeList = paramInfoList.Select(p => p.ParameterType).ToArray();
-
-            var methodBuilder = builder.DefineMethod(info.Name,
-                MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.Virtual,
-                info.CallingConvention, returnType, paramTypeList);
-            return methodBuilder;
-        }
-
-        private void ProxyMethod(MethodBuilder method, MethodInfo proxyMethod, Type parentType)
+        protected override void ProxyMethod(MethodBuilder method, MethodInfo proxyMethod, Type parentType)
         {
             var proxyObjectField = parentType
                 .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
@@ -134,7 +78,7 @@ namespace Machete.Proxy
             var localException = gen.DeclareLocal(typeof(Exception));
 
             //define parameters
-            gen.Emit(OpCodes.Ldc_I4, 2);
+            gen.Emit(OpCodes.Ldc_I4, args.Length);
             gen.Emit(OpCodes.Newarr, typeof(object));
             gen.Emit(OpCodes.Stloc_0, paramVar);
 
@@ -215,22 +159,21 @@ namespace Machete.Proxy
 
         }
 
-
-
-        public Type Build<T>()
+        protected override bool ImplementMethods<T>(TypeBuilder builder)
         {
-            var builder = GetAssemblyBuilder();
-            var module = BuildModule(builder);
-            var typeBuilder = BuildType<T>(module);
-
-            ImplementCtor<T>(typeBuilder);
-
-            if (!ImplementMethods<T>(typeBuilder))
+            var baseType = typeof(T);
+            Type parentType = typeof(ProxyTypeBase<T>);
+            var methods = baseType.GetMethods();
+            foreach (var method in methods)
             {
-                throw new InvalidOperationException("Can't proxy methods");
+                var methodBuilder = DefineMethod(builder, method);
+                ProxyMethod(methodBuilder, method, parentType);
+                builder.DefineMethodOverride(methodBuilder, method);
             }
-            return typeBuilder.CreateType();
+            return true;
         }
+
+
     }
 
 }

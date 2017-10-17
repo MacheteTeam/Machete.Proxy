@@ -9,7 +9,7 @@ namespace Machete.Proxy
     /// <summary>
     /// Cache
     /// </summary>
-    public class ProxyCache
+    public class ProxyTypeCache
     {
         private static readonly Dictionary<string, Type> _cache =
             new Dictionary<string, Type>();

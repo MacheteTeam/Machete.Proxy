@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Machete.Proxy
 {
-    public class AutoProxyFatory<T>
+    public class ProxyTypeFatory<T>
     {
         private ProxyTypeGenerator _proxyTypeGenerator;
 
         private Type _cachedType;
 
 
-        public AutoProxyFatory()
+        public ProxyTypeFatory()
         {
             _proxyTypeGenerator = new ProxyTypeGenerator();
         }
@@ -21,15 +21,15 @@ namespace Machete.Proxy
         public T Build(T proxyObject, IIntercept intercept)
         {
             string key = typeof(T).FullName;
-            ProxyCache cache = new ProxyCache();
-            if (cache.Contains(key))
+            ProxyTypeCache typeCache = new ProxyTypeCache();
+            if (typeCache.Contains(key))
             {
-                _cachedType = cache.Get(key);
+                _cachedType = typeCache.Get(key);
             }
             else
             {
                 _cachedType = _proxyTypeGenerator.Build<T>();
-                cache.Store(key, _cachedType);
+                typeCache.Store(key, _cachedType);
             }
 
             var proxy = (T)Activator.CreateInstance(_cachedType, proxyObject);

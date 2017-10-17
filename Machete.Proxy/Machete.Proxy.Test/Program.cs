@@ -13,21 +13,38 @@ namespace Machete.Proxy.Test
     {
         static void Main(string[] args)
         {
-            IIntercept intercept = new UserIntercept();
-            var proxyObject = new UserDao();
-            var factory = new AutoProxyFatory<IUserDao>();
-            IUserDao userDao = factory.Build(proxyObject, intercept);
-
-            //plugin.TestMethod2("Zhangsan", 42);
-            string ret1 = userDao.Get("nele");
-            int ret2 = userDao.Delete(1);
-            userDao.Show("nele");
-            userDao.Update("nele", 2);
-            IUserDao userDao1 = factory.Build(proxyObject, intercept);
-            // Test();
+            TestProxy();
+            //TestProxy1();
         }
 
 
+        public static void TestProxy1()
+        {
+
+            DemoInvocation invocation = new DemoInvocation();
+            ProxyInterfaceFatory<IUserDao> proxyInterfaceFatory = new ProxyInterfaceFatory<IUserDao>();
+            IUserDao userDao = proxyInterfaceFatory.Build(invocation);
+
+            //  int ret = userDao.Delete(1);
+            userDao.Show("name");
+            // userDao.Get("asd");
+        }
+
+        public static void TestProxy()
+        {
+            IIntercept intercept = new UserIntercept();
+            var proxyObject = new UserDao();
+            var factory = new ProxyTypeFatory<IUserDao>();
+            IUserDao userDao = factory.Build(proxyObject, intercept);
+
+            string ret1 = userDao.Get("张三");
+            Console.WriteLine("------------------------------------------------------------");
+            int ret2 = userDao.Delete(1);
+            Console.WriteLine("------------------------------------------------------------");
+            userDao.Show("张三");
+            Console.WriteLine("------------------------------------------------------------");
+            userDao.Update("张三", 2);
+        }
 
 
 
@@ -44,6 +61,9 @@ namespace Machete.Proxy.Test
             MethodInfo consoleWriteLineInfo = typeof(System.Console).GetMethod("WriteLine", new Type[] { typeof(string) });
             //il.Emit(OpCodes.Ldstr, "Proxy Hello");
             //il.Emit(OpCodes.Call, consoleWriteLineInfo);
+
+
+
 
             var localException = il.DeclareLocal(typeof(Exception));
 
@@ -72,6 +92,42 @@ namespace Machete.Proxy.Test
             Type t = typeBuilder.CreateType();
 
             assemblyBuilder.Save("StudyOpCodes.dll");
+        }
+
+
+        protected void ImplementCtor<T>(TypeBuilder builder)
+        {
+
+            var baseType = typeof(T);
+            Type parentType = typeof(ProxyInterfaceBase);
+            var invocationField = parentType
+                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                .FirstOrDefault(x => x.Name == "_invocation");
+
+            //var proxyTypeField = parentType
+            //    .GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+            //    .FirstOrDefault(x => x.Name == "_proxyType");
+
+            var cbuilder = builder.DefineConstructor(MethodAttributes.Public,
+                CallingConventions.Standard | CallingConventions.HasThis
+                , new Type[] { baseType });
+
+            var gen = cbuilder.GetILGenerator();
+
+            gen.Emit(OpCodes.Ldarg_0); //load this for base type constructor
+            gen.Emit(OpCodes.Call, typeof(object).GetConstructors().Single());
+
+
+            gen.Emit(OpCodes.Ldarg_0); //load load this
+            gen.Emit(OpCodes.Ldarg_1); //load baseType object
+            gen.Emit(OpCodes.Stfld, invocationField);
+
+            //gen.Emit(OpCodes.Ldstr, baseType.FullName);
+            //gen.Emit(OpCodes.Ldarg_1); //load baseType object
+            //gen.Emit(OpCodes.Stfld, proxyTypeField);
+
+            gen.Emit(OpCodes.Ret);
+
         }
     }
 }

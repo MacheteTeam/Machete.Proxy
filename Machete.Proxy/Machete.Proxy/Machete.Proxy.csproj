@@ -40,11 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ProxyCache.cs" />
-    <Compile Include="ProxyFatory.cs" />
+    <Compile Include="Invocation.cs" />
+    <Compile Include="ProxyInterfaceCache.cs" />
+    <Compile Include="ProxyTypeCache.cs" />
+    <Compile Include="ProxyTypeFatory.cs" />
     <Compile Include="IIntercept.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="InterfaceProxy.cs" />
+    <Compile Include="ProxyGeneratorBase.cs" />
+    <Compile Include="ProxyInterfaceBase.cs" />
+    <Compile Include="ProxyInterfaceFatory.cs" />
+    <Compile Include="ProxyInterfaceGenerator.cs" />
     <Compile Include="ProxyTypeBase.cs" />
     <Compile Include="ProxyTypeGenerator.cs" />
   </ItemGroup>

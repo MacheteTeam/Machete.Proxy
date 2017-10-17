@@ -15,7 +15,6 @@ namespace Machete.Proxy.Test
 
         public string Get(string name)
         {
-            throw new Exception("iii");
             return "name :" + name;
         }
 
@@ -26,7 +25,7 @@ namespace Machete.Proxy.Test
 
         public int Update(string name, int id)
         {
-            throw new Exception("hello exception");
+            throw new Exception("update exception");
         }
     }
 }

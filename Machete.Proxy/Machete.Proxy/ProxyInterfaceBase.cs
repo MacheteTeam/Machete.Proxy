@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Machete.Proxy
 {
-    public class ProxyTypeBase<T>
+    public class ProxyInterfaceBase
     {
-        protected T _proxyObject;
+        protected string _proxyType;
 
-        public IIntercept Intercept { set; get; }
+        public IInvocation Invocation { set; get; }
     }
 }

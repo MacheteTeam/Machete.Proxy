@@ -46,7 +46,6 @@
     <Compile Include="ProxyTypeFatory.cs" />
     <Compile Include="IIntercept.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="InterfaceProxy.cs" />
     <Compile Include="ProxyGeneratorBase.cs" />
     <Compile Include="ProxyInterfaceBase.cs" />
     <Compile Include="ProxyInterfaceFatory.cs" />
